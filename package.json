@@ -1,0 +1,39 @@
+{
+    "name": "dev-identify",
+    "description": "Dev Identify fetches the name and profile picture associated with an email address",
+    "version": "1.0.0",
+    "license": "MIT",
+    "author": {
+      "name": "Dev Uncoded",
+      "url": "https://github.com/DevUncoded"
+    },
+    "contributors": [
+      "Rohan Rishi (https://github.com/RohanRishi)"
+    ],
+    "homepage": "https://github.com/DevUncoded/dev-identify#readme",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/DevUncoded/dev-identify.git"
+    },
+    "keywords": [
+      "dev identify",
+      "identify email",
+      "email identification",
+      "profile picture",
+      "name",
+      "google profile api",
+      "gravatar profile api"
+    ],
+    "main": "index.js",
+    "engines": {
+        "node": ">=6.9.1"
+    },
+    "dependencies": {
+        "md5": "^2.2.1",
+        "sync-request": "^6.0.0"
+    },
+    "deprecated": false,
+    "bugs": {
+      "url": "https://github.com/DevUncoded/dev-identify/issues"
+    }
+}
