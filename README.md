@@ -19,6 +19,9 @@ Dev Identify fetches the name and profile picture associated with an email addre
 
     var id = devIdentify(email)
 ```
+<br />
+
+Interested in hosting your own API? You can read about it [here](https://github.com/DevUncoded/dev-identify/wiki/Replicating-The-Whole-Dev-Identify-API) or directly download our complete API package [here](https://github.com/DevUncoded/dev-identify/releases).
 
 <br />
 
@@ -36,7 +39,7 @@ We're working on adding more sources soon.
 
 ## Customizing Dev Identify
 
-Dev Uncoded contains a utility class which you can use to create any feature you can dream of or even change the default source ordering logic.
+Dev Identify contains a utility class which you can use to create any feature you can dream of or even change the default source ordering logic.
 <br /><br />
 
 ```javascript
@@ -61,4 +64,3 @@ dev.validateEmail(email) //Validates email address format (BOOL)
  <br />
 
  The **dev.identify()** function returns the same format as the util.check functions except if the request was unsuccessful, it will also contain an error key and value.
- 
