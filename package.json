@@ -1,7 +1,7 @@
 {
     "name": "dev-identify",
     "description": "Dev Identify fetches the name and profile picture associated with an email address",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "license": "MIT",
     "author": {
       "name": "Dev Uncoded",
