@@ -7,7 +7,7 @@ And Rohan Rishi ( https://github.com/RohanRishi )
 
 MIT License ( https://opensource.org/licenses/MIT )
 */
-const request = require("sync-request")
+const request = require("then-request")
 const md5 = require("md5")
 
 module.exports = devIdentify
@@ -15,38 +15,49 @@ module.exports["default"] = devIdentify
 module.exports["utility"] = devIdentifyUtility
 
 
-function devIdentify(email, optionalGooglePlusAPIKey) {
-  var dev = new devIdentifyUtility()
-  return dev.identify(email, optionalGooglePlusAPIKey)
+function devIdentify(email, callback, optionalGooglePlusAPIKey) {
+  var dev = new devIdentifyUtility(optionalGooglePlusAPIKey)
+  dev.identify(email, callback)
 }
 
 
-function devIdentifyUtility() {
+function devIdentifyUtility(optionalGooglePlusAPIKey) {
+  this.optionalGooglePlusAPIKey = optionalGooglePlusAPIKey
 
   /*
   Fetches the name and profile picture
   associated with an email address.
   */
-  this.identify = function(email, optionalGooglePlusAPIKey) {
+  this.identify = function(email, callback) {
     if(!this.validateEmail(email)) {
-      return {success: false, error: "Invalid email format"}
+      callback({success: false, error: "Invalid email format"})
+      return
     }
-    var gravatar = this.checkGravatar(email)
-    if(gravatar.success) {
-      return gravatar
-    }
-    else {
-      var google = this.checkGoogle(email)
-      if(google.success) {
-        var googlePlus = this.checkGooglePlus(google.id, optionalGooglePlusAPIKey)
-        if(googlePlus.success) {
-          return googlePlus
-        }
-        return google
+    xthis = this
+    this.checkGravatar(email, function(result) {
+      if(result.success) {
+        callback(result)
+        return
       }
-    }
-
-    return {success: false, error: "No result found"}
+      xthis.checkGoogle(email, function(result) {
+        if(result.success) {
+          xthis.checkGooglePlus(result.id, function(gpResult) {
+            if(gpResult.success) {
+              callback(gpResult)
+            }
+            else {
+              delete result.id;
+              callback(result)
+            }
+            return
+          })
+        }
+        else {
+          callback({success: false, error: "No result found"})
+          return
+        }
+      })
+    })
   }
 
 
@@ -55,36 +66,42 @@ function devIdentifyUtility() {
   Checks if an email address exists on
   Gravatar and returns the name & profile picture.
   */
-  this.checkGravatar = function(email) {
+  this.checkGravatar = function(email, callback) {
     var hash = md5(email)
-    var response = request("GET", "https://en.gravatar.com/" + hash + ".json", {
+    request("GET", "https://en.gravatar.com/" + hash + ".json", {
       headers: {
        "user-agent": "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13",
       }
-    })
-    if(response.statusCode !== 200) {
-      return {success: false}
-    }
-    var response = JSON.parse(response.getBody("utf8"))
-    if(!response.entry[0].name.formatted) {
-      if(response.entry[0].displayName) {
-        var name = response.entry[0].displayName
+    }).done(function(response) {
+      if(response.statusCode !== 200) {
+        callback({success: false})
+        return
+      }
+      var response = JSON.parse(response.getBody("utf8"))
+      if(!response.entry[0].name.formatted) {
+        if(response.entry[0].displayName) {
+          var name = response.entry[0].displayName
+        }
+        else {
+          var name = ""
+        }
       }
       else {
-        var name = ""
+        var name = response.entry[0].name.formatted
       }
-    }
-    else {
-      var name = response.entry[0].name.formatted
-    }
+      gravatarImage = "https://en.gravatar.com/avatar/" + hash + ".jpg?size=500"
+      request("GET", gravatarImage).done(function(imageResult) {
+        if(md5(imageResult.getBody()) == "73d9d172659124415e7aa5b0b737a4b4") {
+          gravatarImage = ""
+        }
+        if(!name && !gravatarImage) {
+          callback({success: false})
+          return
+        }
 
-    var image = "https://en.gravatar.com/avatar/" + hash + ".jpg?size=500"
-    if(md5(image) == "075087dca3f0792c244ab08e8308dec5") {
-      //Default image.
-      var image = ""
-    }
-
-    return {success: true, name: name, profile_picture: image, source: "Gravatar"}
+        callback({success: true, name: name, profile_picture: gravatarImage, source: "Gravatar"})
+      })
+    })
   }
 
 
@@ -94,17 +111,27 @@ function devIdentifyUtility() {
   Google and returns the name, Google ID
   & profile picture.
   */
-  this.checkGoogle = function(email) {
-    var response = request("GET", "https://picasaweb.google.com/data/entry/api/user/" + email + "?alt=json")
-    if(response.statusCode !== 200) {
-      return {success: false}
-    }
-    var response = JSON.parse(response.getBody("utf8"))
-    var id = response.entry.title.$t
-    var name = response.entry.author[0].name.$t
-    var image = response.entry.gphoto$thumbnail.$t + "?sz=500"
+  this.checkGoogle = function(email, callback) {
+    request("GET", "https://picasaweb.google.com/data/entry/api/user/" + email + "?alt=json")
+    .done(function(response) {
+      if(response.statusCode !== 200) {
+        callback({success: false})
+        return
+      }
+      var response = JSON.parse(response.getBody("utf8"))
+      var id = response.entry.title.$t
+      var name = response.entry.author[0].name.$t
+      var image = response.entry.gphoto$thumbnail.$t + "?sz=500"
+      if(!isNaN(name)) {
+        var name = ""
+      }
+      if(!name && !image) {
+        callback({success: false})
+        return
+      }
 
-    return {success: true, id: id, name: name, profile_picture: image, source: "Google"}
+      callback({success: true, id: id, name: name, profile_picture: image, source: "Google"})
+    })
   }
 
 
@@ -113,23 +140,35 @@ function devIdentifyUtility() {
   Get the profile picture and name
   from Google Plus.
   */
-  this.checkGooglePlus = function(google_id, optionalGooglePlusAPIKey) {
-    if(!optionalGooglePlusAPIKey) { return {success: false} }
-    var response = request("GET", "https://www.googleapis.com/plus/v1/people/" + google_id + "?key=" + optionalGooglePlusAPIKey)
-    if(response.statusCode !== 200) {
-      return {success: false}
+  this.checkGooglePlus = function(googleID, callback) {
+    if(!this.optionalGooglePlusAPIKey) {
+      callback({success: false})
+      return
     }
-    var response = JSON.parse(response.getBody("utf8"))
-    if(response.image.isDefault === false) {
-      var image = response.image.url + "0"
-    }
-    else {
-      var image = ""
-    }
+    request("GET", "https://www.googleapis.com/plus/v1/people/" + googleID + "?key=" + this.optionalGooglePlusAPIKey)
+    .done(function(response) {
+      if(response.statusCode !== 200) {
+        callback({success: false})
+        return
+      }
+      var response = JSON.parse(response.getBody("utf8"))
+      if(response.image.isDefault === false) {
+        var image = response.image.url + "0"
+      }
+      else {
+        var image = ""
+      }
+      var name = response.displayName
+      if(!isNaN(name)) {
+        var name = ""
+      }
+      if(!name && !image) {
+        callback({success: false})
+        return
+      }
 
-    var name = response.displayName
-
-    return {success: true, name: name, profile_picture: image, source: "Google Plus"}
+      callback({success: true, name: name, profile_picture: image, source: "Google Plus"})
+    })
   }
 
 

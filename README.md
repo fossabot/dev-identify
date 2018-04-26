@@ -12,12 +12,14 @@ Dev Identify fetches the name and profile picture associated with an email addre
 ### Usage
 
    ```javascript
-    var devIdentify = require("dev-identify")
+   var devIdentify = require("dev-identify")
 
 
-    var email = "hello@devuncoded.com"
+   var email = "hello@devuncoded.com"
 
-    var id = devIdentify(email)
+   devIdentify(email, function(result) {
+     console.log(result)
+   })
 ```
 <br />
 
@@ -43,16 +45,16 @@ Dev Identify contains a utility class which you can use to create any feature yo
 <br /><br />
 
 ```javascript
-var dev = new devIdentify.utility()
+var dev = new devIdentify.utility(optionalGooglePlusKey)
 
 
-dev.identify(email, optionalGooglePlusKey) //Identifies email
+dev.identify(email, callback) //Identifies email
 
-dev.checkGravatar(email) //Only checks Gravatar.
+dev.checkGravatar(email, callback) //Only checks Gravatar.
 
-dev.checkGoogle(email) //Only checks Google.
+dev.checkGoogle(email, callback) //Only checks Google.
 
-dev.checkGooglePlus(googleId, googlePlusAPIKey) //Only checks Google Plus.
+dev.checkGooglePlus(googleId, callback) //Only checks Google Plus.
 
 dev.validateEmail(email) //Validates email address format (BOOL)
 ```
@@ -63,4 +65,4 @@ dev.validateEmail(email) //Validates email address format (BOOL)
  If the request was successful, they will also contain name, profile_picture and source key/values.
  <br />
 
- The **dev.identify()** function returns the same format as the util.check functions except if the request was unsuccessful, it will also contain an error key and value.
+ The **dev.identify()** function returns the same format as the dev.check functions except if the request was unsuccessful, it will also contain an error key and value.
