@@ -78,7 +78,7 @@ function devIdentifyUtility(optionalGooglePlusAPIKey) {
         return
       }
       var response = JSON.parse(response.getBody("utf8"))
-      if(!response.entry[0].name.formatted) {
+      if(!response.entry[0].name || !response.entry[0].name.formatted) {
         if(response.entry[0].displayName) {
           var name = response.entry[0].displayName
         }
