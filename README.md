@@ -17,7 +17,8 @@ Dev Identify fetches the name and profile picture associated with an email addre
 
    var email = "hello@devuncoded.com"
 
-   devIdentify(email, function(result) {
+   devIdentify(email)
+   .then(function(result) {
      console.log(result)
    })
 ```
@@ -48,13 +49,13 @@ Dev Identify contains a utility class which you can use to create any feature yo
 var dev = new devIdentify.utility(optionalGooglePlusKey)
 
 
-dev.identify(email, callback) //Identifies email
+dev.identify(email) //Identifies email
 
-dev.checkGravatar(email, callback) //Only checks Gravatar.
+dev.checkGravatar(email) //Only checks Gravatar.
 
-dev.checkGoogle(email, callback) //Only checks Google.
+dev.checkGoogle(email) //Only checks Google.
 
-dev.checkGooglePlus(googleId, callback) //Only checks Google Plus.
+dev.checkGooglePlus(googleId) //Only checks Google Plus.
 
 dev.validateEmail(email) //Validates email address format (BOOL)
 ```
