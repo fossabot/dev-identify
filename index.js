@@ -30,7 +30,7 @@ function devIdentifyUtility(optionalGooglePlusAPIKey) {
   */
   this.identify = async function(email) {
     //First validate the format.
-    if(!this.validateEmail(email)) { return resolve({success: false, error: "Invalid email format"}) }
+    if(!this.validateEmail(email)) { return {success: false, error: "Invalid email format"} }
     //Start by checking Gravatar.
     var result = await this.checkGravatar(email)
     if(result.success) {
@@ -134,10 +134,11 @@ function devIdentifyUtility(optionalGooglePlusAPIKey) {
   */
   this.checkGooglePlus = function(googleID) {
     //Create a promise as a response.
+    var gPlusAPIKey = this.gPlusAPIKey
     return new Promise(function(resolve, reject) {
-      if(!this.gPlusAPIKey) { return resolve({success: false}) }
+      if(!gPlusAPIKey) { return resolve({success: false}) }
       //Send the request to the Google Plus API.
-      request("GET", "https://www.googleapis.com/plus/v1/people/" + googleID + "?key=" + this.gPlusAPIKey)
+      request("GET", "https://www.googleapis.com/plus/v1/people/" + googleID + "?key=" + gPlusAPIKey)
       .done(function(response) {
         //Validate and standardize response.
         if(response.statusCode !== 200) { return resolve({success: false}) }
