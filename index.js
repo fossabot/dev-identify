@@ -2,7 +2,7 @@
 Dev Identify fetches the name and
 profile picture associated with an email address.
 
-Written by Dev Uncoded ( https://github.com/DevUncoded )
+Written by Dev Ang ( https://github.com/SociallyDev )
 And Rohan Rishi ( https://github.com/RohanRishi )
 
 MIT License ( https://opensource.org/licenses/MIT )

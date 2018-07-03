@@ -24,7 +24,7 @@ Dev Identify fetches the name and profile picture associated with an email addre
 ```
 <br />
 
-Interested in hosting your own API? You can read about it [here](https://github.com/DevUncoded/dev-identify/wiki/Replicating-The-Whole-Dev-Identify-API) or directly download our complete API package [here](https://github.com/DevUncoded/dev-identify/releases).
+Interested in hosting your own API? You can read about it [here](https://github.com/SociallyDev/dev-identify/wiki/Replicating-The-Whole-Dev-Identify-API) or directly download our complete API package [here](https://github.com/SociallyDev/dev-identify/releases).
 
 <br />
 
@@ -33,7 +33,7 @@ Currently, Dev Identify fetches data from:
 
  - Google
  - Gravatar
- - Google Plus ([Requires extra setup](https://github.com/DevUncoded/dev-identify/wiki/Configuring-Google-Plus))
+ - Google Plus ([Requires extra setup](https://github.com/SociallyDev/dev-identify/wiki/Configuring-Google-Plus))
 
 We're working on adding more sources soon.
 

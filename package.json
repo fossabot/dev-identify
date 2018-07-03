@@ -1,19 +1,19 @@
 {
   "name": "dev-identify",
   "description": "Dev Identify fetches the name and profile picture associated with an email address",
-  "version": "3.1.0",
+  "version": "3.1.1",
   "license": "MIT",
   "author": {
-    "name": "Dev Uncoded",
-    "url": "https://github.com/DevUncoded"
+    "name": "Dev Ang",
+    "url": "https://github.com/SociallyDev"
   },
   "contributors": [
     "Rohan Rishi (https://github.com/RohanRishi)"
   ],
-  "homepage": "https://github.com/DevUncoded/dev-identify#readme",
+  "homepage": "https://github.com/SociallyDev/dev-identify#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/DevUncoded/dev-identify.git"
+    "url": "https://github.com/SociallyDev/dev-identify.git"
   },
   "keywords": [
     "dev identify",
@@ -34,6 +34,6 @@
   },
   "deprecated": false,
   "bugs": {
-    "url": "https://github.com/DevUncoded/dev-identify/issues"
+    "url": "https://github.com/SociallyDev/dev-identify/issues"
   }
 }
