@@ -1,4 +1,6 @@
 # Dev Identify
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FSociallyDev%2Fdev-identify.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FSociallyDev%2Fdev-identify?ref=badge_shield)
+
 Dev Identify fetches the name and profile picture associated with an email address. An API is also available at [devidentify.com](https://devidentify.com).
 
 <br />
@@ -67,3 +69,7 @@ dev.validateEmail(email) //Validates email address format (BOOL)
  <br />
 
  The **dev.identify()** function returns the same format as the dev.check functions except if the request was unsuccessful, it will also contain an error key and value.
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FSociallyDev%2Fdev-identify.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2FSociallyDev%2Fdev-identify?ref=badge_large)
